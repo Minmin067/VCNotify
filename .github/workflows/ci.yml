@@ -6,6 +6,17 @@ on:
   pull_request:
     branches: [ main ]
 
+
+# 環境変数の設定
+# GitHub Secrets を使用して、機密情報を安全に管理
+env:
+  DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+  GUILD_ID:      ${{ secrets.GUILD_ID }}
+  CHANNEL_ID:    ${{ secrets.CHANNEL_ID }}
+  SKIP_START:    ${{ secrets.SKIP_START }}
+  SKIP_END:      ${{ secrets.SKIP_END }}
+
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -49,10 +60,3 @@ jobs:
       #   run: |
       #     docker tag vcnotify:test youruser/vcnotify:latest
       #     docker push youruser/vcnotify:latest
-
-env:
-  DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-  GUILD_ID:      ${{ secrets.GUILD_ID }}
-  CHANNEL_ID:    ${{ secrets.CHANNEL_ID }}
-  SKIP_START:    ${{ secrets.SKIP_START }}
-  SKIP_END:      ${{ secrets.SKIP_END }}
