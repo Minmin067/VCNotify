@@ -24,11 +24,11 @@ jobs:
       # イメージのビルドとタグ付け
       - name: Build Docker image
         run: |
-            IMAGE=ghcr.io/${{ github.repository_owner }}/vcnotify:latest
-            docker build -t $IMAGE .
+          IMAGE=ghcr.io/${{ github.repository_owner.toLowerCase() }}/vcnotify:latest
+          docker build -t $IMAGE .
 
       # イメージを GHCR にプッシュ
       - name: Push Docker image
         run: |
-          IMAGE=ghcr.io/${{ github.repository_owner }}/vcnotify:latest
+          IMAGE=ghcr.io/${{ github.repository_owner.toLowerCase() }}/vcnotify:latest
           docker push $IMAGE
