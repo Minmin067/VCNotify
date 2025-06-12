@@ -1,0 +1,19 @@
+# Binaries
+VCNotify/bin/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Go
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Editor
+.vscode/
+.idea/
+
+# Env
+.env
