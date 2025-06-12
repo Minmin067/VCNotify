@@ -17,6 +17,8 @@ env:
   SKIP_END:      ${{ secrets.SKIP_END }}
 
 
+
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -30,6 +32,14 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: '1.22'  # 任意の最低バージョン
+
+      - name: Create .env file
+        run: |
+          echo "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}" >> .env
+          echo "GUILD_ID=${{ secrets.GUILD_ID }}" >> .env
+          echo "CHANNEL_ID=${{ secrets.CHANNEL_ID }}" >> .env
+          echo "SKIP_START=${{ secrets.SKIP_START }}" >> .env
+          echo "SKIP_END=${{ secrets.SKIP_END }}" >> .env
 
       # 依存解決・lint・テスト
       - name: Tidy modules
