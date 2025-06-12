@@ -10,6 +10,5 @@ RUN go build -o /vcnotify
 # ランタイムステージ
 FROM alpine:latest
 COPY --from=builder /vcnotify /vcnotify
-COPY .env /app/.env
 WORKDIR /app
 CMD ["/vcnotify"]
