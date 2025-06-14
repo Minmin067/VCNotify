@@ -31,6 +31,12 @@ func main() {
         // デバッグログ：イベント受信
         log.Printf("[DEBUG] VoiceStateUpdate UserID=%s ChannelID=%s\n", vs.UserID, vs.ChannelID)
 
+        // 退出イベントは通知しない
+        if vs.ChannelID == "" {
+            log.Println("[DEBUG] leave event detected, skipping notification")
+            return
+        }
+
         // JST の時刻で判定
         jst := time.FixedZone("Asia/Tokyo", 9*60*60)
         now := time.Now().In(jst)
