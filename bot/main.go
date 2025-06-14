@@ -29,24 +29,17 @@ func main() {
     dg.Identify.Intents = discordgo.IntentsGuilds | discordgo.IntentsGuildVoiceStates
 
     dg.AddHandler(func(s *discordgo.Session, vs *discordgo.VoiceStateUpdate) {
-        // デバッグログ：イベント受信
-        log.Printf("[DEBUG] VoiceStateUpdate UserID=%s ChannelID=%s\n", vs.UserID, vs.ChannelID)
-
         // 退出イベントは通知しない
         if vs.ChannelID == "" {
-            log.Println("[DEBUG] leave event detected, skipping notification")
             return
         }
 
         // JST の時刻で判定
         jst := time.FixedZone("Asia/Tokyo", 9*60*60)
         now := time.Now().In(jst)
-        log.Printf("[DEBUG] JST hour=%d (skip %d-%d)\n", now.Hour(), skipStart, skipEnd)
         if skipStart <= now.Hour() && now.Hour() < skipEnd {
-            log.Println("[DEBUG] within skip window, skipping notification")
             return
         }
-        log.Println("[DEBUG] outside skip window, preparing notification")
 
         // ユーザーのサーバーニックネーム（未設定時はユーザー名）
         member, err := s.GuildMember(vs.GuildID, vs.UserID)
@@ -62,7 +55,7 @@ func main() {
             }
         }
 
-        // 通知送信: ユーザー名のみ
+        // 通知送信
         channelID := os.Getenv("CHANNEL_ID")
         message := fmt.Sprintf("🔔 %s がボイスチャンネルに参加しました", displayName)
         if _, err := s.ChannelMessageSend(channelID, message); err != nil {
