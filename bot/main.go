@@ -1,6 +1,7 @@
 package main
 
 import (
+    "fmt"
     "log"
     "os"
     "strconv"
@@ -45,11 +46,25 @@ func main() {
             log.Println("[DEBUG] within skip window, skipping notification")
             return
         }
-        log.Println("[DEBUG] outside skip window, sending notification")
+        log.Println("[DEBUG] outside skip window, preparing notification")
 
-        // 通知送信
+        // ユーザーのサーバーニックネーム（未設定時はユーザー名）
+        member, err := s.GuildMember(vs.GuildID, vs.UserID)
+        var displayName string
+        if err == nil && member.Nick != "" {
+            displayName = member.Nick
+        } else {
+            user, err := s.User(vs.UserID)
+            if err == nil {
+                displayName = user.Username
+            } else {
+                displayName = vs.UserID
+            }
+        }
+
+        // 通知送信: ユーザー名のみ
         channelID := os.Getenv("CHANNEL_ID")
-        message := "🔔 Voice channel activity detected"
+        message := fmt.Sprintf("🔔 %s がボイスチャンネルに参加しました", displayName)
         if _, err := s.ChannelMessageSend(channelID, message); err != nil {
             log.Printf("[ERROR] failed to send message: %v\n", err)
         }
