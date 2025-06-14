@@ -11,6 +11,9 @@ import (
 )
 
 func main() {
+    // 前回の VoiceState を管理するマップ
+    lastVoice := make(map[string]string)
+
     // 環境変数取得
     token := os.Getenv("DISCORD_TOKEN")
     if token == "" {
@@ -29,6 +32,13 @@ func main() {
     dg.Identify.Intents = discordgo.IntentsGuilds | discordgo.IntentsGuildVoiceStates
 
     dg.AddHandler(func(s *discordgo.Session, vs *discordgo.VoiceStateUpdate) {
+                // 前回の状態と比較して、同じチャンネルでの更新（ミュート／画面共有など）はスキップ
+        prevChannel, _ := lastVoice[vs.UserID]
+        lastVoice[vs.UserID] = vs.ChannelID
+        if prevChannel == vs.ChannelID && vs.ChannelID != "" {
+            return
+        }
+
         // 退出イベントは通知しない
         if vs.ChannelID == "" {
             return
