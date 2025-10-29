@@ -48,7 +48,7 @@ func main() {
 
 	dg.AddHandler(func(s *discordgo.Session, vs *discordgo.VoiceStateUpdate) {
 		// 前回の状態と比較して、同じチャンネルでの更新（ミュート／画面共有など）はスキップ
-		prevChannel, _ := lastVoice[vs.UserID]
+		prevChannel := lastVoice[vs.UserID]
 		lastVoice[vs.UserID] = vs.ChannelID
 		if prevChannel == vs.ChannelID && vs.ChannelID != "" {
 			return
