@@ -24,10 +24,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          IMAGE=ghcr.io/Minmin067/vcnotify:latest
+          IMAGE=ghcr.io/minmin067/vcnotify:latest
           docker build -t "$IMAGE" .
 
       - name: Push Docker image
         run: |
-          IMAGE=ghcr.io/minmin067/vcnotify:latest
+          IMAGE=ghcr.io/Minmin067/vcnotify:latest
           docker push "$IMAGE"
