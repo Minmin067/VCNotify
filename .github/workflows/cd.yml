@@ -15,12 +15,23 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      # Ensure GHCR_PAT secret exists (fail early with a clear message)
+      - name: Ensure GHCR_PAT is set
+        run: |
+          if [ -z "${{ secrets.GHCR_PAT }}" ]; then
+            echo "ERROR: secrets.GHCR_PAT is not set. Create a Personal Access Token with 'write:packages' scope and add it as repository secret named GHCR_PAT." >&2
+            exit 1
+          fi
+
+      # Use PAT to log in to GitHub Container Registry
+      # Create a PAT: Settings -> Developer settings -> Personal access tokens -> (classic) -> generate token with write:packages (and repo if needed)
+      # Then add it to this repo: Settings -> Secrets and variables -> Actions -> New repository secret (Name: GHCR_PAT)
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GHCR_PAT }}
 
       - name: Build Docker image
         run: |
